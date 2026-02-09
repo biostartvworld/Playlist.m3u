@@ -1,4 +1,4 @@
-name: Auto Update M3U
+name: Auto Update Playlist
 
 on:
   schedule:
@@ -6,19 +6,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Merge playlists
+      - name: Merge m3u
         run: |
           echo "#EXTM3U" > playlist.m3u
           while read url; do
             curl -L -s "$url" | grep -v "#EXTM3U" >> playlist.m3u
           done < sources.txt
 
-      - name: Commit & Push
+      - name: Push update
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
